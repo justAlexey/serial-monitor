@@ -39,10 +39,10 @@ class PortGroup(QtWidgets.QGroupBox):
         l1 = QtWidgets.QVBoxLayout(self)
 
         self.port_list = QtWidgets.QComboBox()
-        self.port_activate = QtWidgets.QPushButton("Открыть")
+        self.port_activate_button = QtWidgets.QPushButton("Открыть")
 
         l1.addWidget(self.port_list)
-        l1.addWidget(self.port_activate)
+        l1.addWidget(self.port_activate_button)
 
 
 class Messanger(QtWidgets.QWidget):
@@ -55,18 +55,31 @@ class Messanger(QtWidgets.QWidget):
         self.send_line.setEnabled(False)
 
         self.send_message_area = QtWidgets.QTextEdit()
-        self.send_message_area.setEnabled(False)
+        self.send_message_area.setReadOnly(True)
 
         self.receive_message_area = QtWidgets.QTextEdit()
-        self.receive_message_area.setEnabled(False)
+        self.receive_message_area.setReadOnly(True)
+        self.receive_message_area.verticalScrollBar().rangeChanged.connect(self.update_text_edit)
 
         l1.addWidget(self.send_line)
         l1.addWidget(self.send_message_area)
         l1.addWidget(self.receive_message_area)
 
+    def update_text_edit(self):
+        temp = self.receive_message_area.verticalScrollBar().maximum()
+        self.receive_message_area.verticalScrollBar().setValue(temp)
+
+    def add_send_text(self, text):
+        self.send_message_area.insertPlainText(text)
+
+    def add_receive_text(self, text):
+        print("add")
+        self.receive_message_area.insertPlainText("".join(text))
+
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
-        self.widget = CentralWidget()
-        self.setCentralWidget(self.widget)
+        self.central_widget = CentralWidget()
+        self.setCentralWidget(self.central_widget)
+        self.statusBar().showMessage("")

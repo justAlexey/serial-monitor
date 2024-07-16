@@ -1,15 +1,14 @@
 from PyQt6.QtWidgets import QApplication
-from gui import MainWindow
-import controller as cntrl
-import model as mdl
+from view import MainWindow
+from controller import Controller
+from model import Model
 
 
 def main():
     app = QApplication([])
     window = MainWindow()
-    port = mdl.Port()
-    controller = cntrl.Controller(window, port)
-    controller.fill_gui()
+    port = Model()
+    controller = Controller(window, port)
     window.show()
     app.exec()
 
